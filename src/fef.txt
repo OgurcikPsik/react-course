@@ -1,0 +1,40 @@
+<div className="App">
+    {id: 1, title: 'JavaScript 1', body: 'Description'},
+    {id: 2, title: 'JavaScript 2', body: 'Description'},
+    {id: 3, title: 'JavaScript 3', body: 'Description'},
+      <PostForm/>
+      {posts.length !== 0
+        ? <PostList title={'Посты про JS'} />
+        : <h1 style={{textAlign: 'center'}}>Посты не найдены!</h1>
+      }
+    </div>
+
+
+        <form>
+            <MyInput
+            />
+            <MyInput
+            />
+            <MyButton>Создать пост</MyButton>
+        </form>
+
+
+        <div className='post'>
+            <div className='post__content'>
+                <strong>номер. название</strong>
+                <div>
+                    тело
+                </div>
+            </div>
+            <div className='post__btns'>
+                <MyButton>Удалить</MyButton>
+            </div>
+        </div>
+
+
+        <div>
+            <h1 style={{textAlign: 'center '}}>
+                title
+            </h1>
+            каждый пост
+        </div>
