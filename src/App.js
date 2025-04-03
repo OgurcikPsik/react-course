@@ -9,6 +9,8 @@ import MyButton from "./components/UI/button/MyButton";
 import MyModal from "./components/UI/MyModal/MyModal";
 import Loader from "./components/UI/loader/Loader";
 import {useFetching} from "./hooks/useFetching";
+import {getPageCount} from "./utils/pages";
+import {usePaginaion} from "./hooks/usePagintaion";
 function App() {
     const [posts, setPosts] = React.useState([
         {id: 1, title: 'а', body: 'ц'},
@@ -17,10 +19,16 @@ function App() {
     ]);
     const [filter, setFilter] = React.useState({sort: '', query: ''});
     const [visible, setVisible] = React.useState(false);
+    const [totalPages, setTotalPages] = React.useState(0);
+    const [limit, setLimit] = React.useState(10);
+    const [page, setPage] = React.useState(1);
     const [fetchPosts, isLoadingPosts, errorPosts] = useFetching(async () => {
-        const fetchedPosts = await PostService.fetchPosts();
-        setPosts(fetchedPosts);
-    })
+        const response = await PostService.fetchPosts(limit, page);
+        const totalCount = response.headers['x-total-count'];
+        setTotalPages(getPageCount(totalCount, limit));
+        setPosts(response.data)
+    });
+    const pageArray = usePaginaion(totalPages);
     const removePost = (post) => {
         setPosts(posts.filter((p) => p.id !== post.id));
     };
@@ -51,6 +59,9 @@ function App() {
                     remove={removePost}
                 />
             }
+            {pageArray.map(p =>
+                <MyButton>{p}</MyButton>
+            )}
         </div>
     );
 }
