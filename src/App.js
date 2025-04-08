@@ -11,6 +11,7 @@ import Loader from "./components/UI/loader/Loader";
 import {useFetching} from "./hooks/useFetching";
 import {getPageCount} from "./utils/pages";
 import {usePaginaion} from "./hooks/usePagintaion";
+import Pagination from "./components/UI/pagination/Pagination";
 function App() {
     const [posts, setPosts] = React.useState([
         {id: 1, title: 'а', body: 'ц'},
@@ -28,7 +29,6 @@ function App() {
         setTotalPages(getPageCount(totalCount, limit));
         setPosts(response.data)
     });
-    const pageArray = usePaginaion(totalPages);
     const removePost = (post) => {
         setPosts(posts.filter((p) => p.id !== post.id));
     };
@@ -37,9 +37,12 @@ function App() {
         setVisible(false);
     }
     const sortedAndSearchedPosts = usePost(posts, filter.sort, filter.query);
+    const changePage = (page) => {
+        setPage(page);
+    };
     useEffect(() => {
         fetchPosts();
-    }, [])
+    }, [page])
     return (
         <div className="App">
             <MyButton style={{marginTop: '30px'}} onClick={() => setVisible(true)}>Создать пост</MyButton>
@@ -59,9 +62,7 @@ function App() {
                     remove={removePost}
                 />
             }
-            {pageArray.map(p =>
-                <MyButton>{p}</MyButton>
-            )}
+            <Pagination totalPages={totalPages} page={page} changePage={changePage} />
         </div>
     );
 }
